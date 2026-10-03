@@ -1,63 +1,60 @@
-# Teste Prático — Frente de Caixa (PDV)
+# PDV KasterWeb — Frente de Caixa
 
-## Objetivo
-Construir uma frente de caixa simples, com um backend que sirva os dados e um
-frontend para o operador usar no dia a dia.
-
-Queremos entender como você pensa, organiza o código e resolve problemas do
-mundo real. Não existe um jeito único de fazer: tome as decisões que fizerem
-sentido e saiba explicá-las depois.
-
-## O que construir
-Uma tela de PDV onde o operador consegue:
-- Buscar produtos (por nome ou código).
-- Adicionar produtos ao carrinho, ajustar quantidade e remover itens.
-- Ver o total da venda sendo calculado enquanto monta o carrinho.
-- Finalizar a venda informando a forma de pagamento.
-- No pagamento em dinheiro, informar o valor recebido e ver o troco.
-- Consultar uma venda já finalizada (comprovante/resumo).
-
-O backend deve expor os dados e receber as vendas. O frontend deve consumir
-esse backend.
-
-## Regras de negócio
-- O total e os subtotais da venda são confiáveis: considere que o cliente
-  pode enviar qualquer coisa, então o valor final precisa ser garantido pela
-  sua aplicação.
-- O preço do produto no momento da venda deve ficar registrado na venda,
-  mesmo que o preço do produto mude depois.
-- Uma venda tem um ou mais itens.
-- No pagamento em dinheiro, o valor recebido não pode ser menor que o total,
-  e o troco é a diferença.
-- Produtos que não estão mais disponíveis não devem entrar em novas vendas.
-- Uma venda finalizada não deve ser alterada.
+Frente de caixa (PDV) simples, com backend em Laravel e frontend em React + TypeScript, desenvolvida como teste prático. O enunciado completo está em [`docs/PROJECT.md`](docs/PROJECT.md).
 
 ## Stack
-- Backend: Laravel.
-- Frontend: React. (com TypeScript é bem-vindo, mas não obrigatório)
 
-Use o que você já conhece de cada stack. Bibliotecas extras são bem-vindas,
-desde que justificadas.
+| Camada    | Tecnologia                                                        |
+| --------- | ----------------------------------------------------------------- |
+| Backend   | PHP 8.4, Laravel 13, Laravel Fortify                              |
+| Frontend  | React 19, TypeScript, Inertia.js v3, Tailwind CSS v4, Shadcn/ui   |
+| Rotas     | Laravel Wayfinder (funções TypeScript tipadas para rotas Laravel) |
+| Banco     | MySQL                                                   |
+| Qualidade | PHPUnit, Larastan (PHPStan), Laravel Pint                         |
+| Build     | Vite                                                              |
 
-## O que avaliaremos
-- **Backend:** como você modela os dados, garante as regras de negócio,
-  valida as entradas e organiza o código (rotas, controllers, serviços,
-  testes).
-- **Frontend:** componentização, consumo da API, estados de carregamento /
-  erro / vazio, tratamento de falhas, cálculo do troco e usabilidade.
-- **Código:** legibilidade, nomes claros, organização e segurança básica.
+## Requisitos
 
-## Entrega
-- Repositório Git com o projeto.
-- README explicando como rodar (backend e frontend) e as decisões tomadas.
-- Massa de dados de exemplo (produtos) para testar sem digitar tudo na mão.
+- PHP 8.3+ (desenvolvido com 8.4) com as extensões padrão do Laravel
+- Composer 2
+- Node.js 22+ e npm
 
-## Prazo
-1 a 5 dias. Não precisa entregar tudo: prefira um escopo menor, bem feito e
-explicado, do que muita coisa inacabada.
+## Como rodar
 
-## Bônus (opcional)
-- Testes automatizados das regras principais.
-- Login/autenticação.
-- Histórico de vendas do dia.
-- Cuidados com estoque.
+```bash
+gh repo clone csvitor-dev/pdv-kasterweb
+cd pdv-kasterweb
+composer setup     # dependências, .env, APP_KEY, migrations e build do frontend
+php artisan db:seed  # massa de dados de exemplo
+composer dev       # servidor Laravel + Vite em paralelo
+```
+
+A aplicação fica disponível em <http://localhost:8000>. Backend e frontend rodam juntos: o React é servido pelo Laravel via Inertia, então não é necessário subir dois projetos separados.
+
+## Testes e qualidade
+
+```bash
+composer test          # Pint (check), PHPStan e suíte PHPUnit
+php artisan test       # apenas a suíte de testes
+composer lint          # formata o código PHP com Pint
+npm run types:check    # checagem de tipos TypeScript
+composer ci:check      # tudo acima, como na CI
+```
+
+## Estrutura do projeto
+
+```
+app/                 # Código do backend (models, controllers, actions, requests)
+database/            # Migrations, factories e seeders
+resources/js/        # Frontend React + TypeScript
+  pages/             # Páginas Inertia
+  components/        # Componentes reutilizáveis
+routes/              # Rotas web
+tests/               # Testes Feature e Unit (PHPUnit)
+docs/                # Enunciado e documentação do projeto
+```
+
+## Decisões tomadas
+
+- **Laravel + React via Inertia.js:** um único projeto em vez de API REST + SPA separada. O frontend continua sendo React consumindo dados do backend, mas sem a sobrecarga de CORS, autenticação por token e dois deploys. As rotas são tipadas no frontend com Wayfinder.
+- **Starter kit oficial (Laravel React):** já entrega autenticação (Fortify), componentes de UI (Radix + Tailwind) e tooling configurado, permitindo focar no domínio do PDV.
