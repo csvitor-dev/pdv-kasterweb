@@ -56,6 +56,9 @@ docs/                # Enunciado e documentação do projeto
 
 ## Decisões tomadas
 
-- **Laravel + React via Inertia.js:** um único projeto em vez de API REST + SPA separada. O frontend continua sendo React consumindo dados do backend, mas sem a sobrecarga de CORS, autenticação por token e dois deploys. As rotas são tipadas no frontend com Wayfinder.
+- **Laravel + React via Inertia.js:** um único projeto em vez de backend e SPA separados, sem a sobrecarga de CORS e dois deploys. O Inertia serve as páginas; os dados (busca de produtos, criação e consulta de vendas) vêm de uma API JSON em `/api`. As rotas são tipadas no frontend com Wayfinder.
+- **Sanctum em modo SPA:** autentica a API com o mesmo cookie de sessão do login, mantendo o `api.php` sem sessão para outros clientes, que podem usar tokens Bearer.
+- **Controller → Service → Repository:** controllers de um endpoint só, Inputs (DTOs) como contrato de entrada dos services, repositories atrás de interfaces e API Resources como contrato de saída. Detalhes em [`docs/MODELING.md`](docs/MODELING.md).
+- **Testes de integração por regra de negócio:** cada regra do enunciado é coberta por um teste que entra pela requisição HTTP e atravessa todas as camadas até o banco (SQLite em memória), sem mocks.
 - **Starter kit oficial (Laravel React):** já entrega autenticação (Fortify), componentes de UI (Radix + Tailwind) e tooling configurado, permitindo focar no domínio do PDV.
 - **SQLite:** banco em arquivo, sem servidor para instalar ou configurar. Suficiente para o escopo do teste e simplifica rodar o projeto.
