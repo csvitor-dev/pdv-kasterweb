@@ -9,7 +9,7 @@ Frente de caixa (PDV) simples, com backend em Laravel e frontend em React + Type
 | Backend   | PHP 8.4, Laravel 13, Laravel Fortify                              |
 | Frontend  | React 19, TypeScript, Inertia.js v3, Tailwind CSS v4, Shadcn/ui   |
 | Rotas     | Laravel Wayfinder (funções TypeScript tipadas para rotas Laravel) |
-| Banco     | MySQL                                                   |
+| Banco     | SQLite                                                            |
 | Qualidade | PHPUnit, Larastan (PHPStan), Laravel Pint                         |
 | Build     | Vite                                                              |
 
@@ -58,3 +58,4 @@ docs/                # Enunciado e documentação do projeto
 
 - **Laravel + React via Inertia.js:** um único projeto em vez de API REST + SPA separada. O frontend continua sendo React consumindo dados do backend, mas sem a sobrecarga de CORS, autenticação por token e dois deploys. As rotas são tipadas no frontend com Wayfinder.
 - **Starter kit oficial (Laravel React):** já entrega autenticação (Fortify), componentes de UI (Radix + Tailwind) e tooling configurado, permitindo focar no domínio do PDV.
+- **SQLite:** banco em arquivo, sem servidor para instalar ou configurar. Suficiente para o escopo do teste e simplifica rodar o projeto.
