@@ -4,6 +4,12 @@ Frente de caixa (PDV) para o operador do dia a dia: busca de produtos por nome o
 
 ## Escopo atendido
 
+### Modelagem inicial (pré-concepção)
+
+<div align="center">
+  <img src="./docs/modeling.excalidraw.png" height="716" width="530" alt="Modelagem do projeto"/>
+</div>
+
 ### Requisitos
 
 | Requisito do enunciado                        | Como foi atendido                                                                                                                       |
