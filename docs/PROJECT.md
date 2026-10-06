@@ -1,6 +1,7 @@
 # Teste Prático — Frente de Caixa (PDV)
 
 ## Objetivo
+
 Construir uma frente de caixa simples, com um backend que sirva os dados e um
 frontend para o operador usar no dia a dia.
 
@@ -9,7 +10,9 @@ mundo real. Não existe um jeito único de fazer: tome as decisões que fizerem
 sentido e saiba explicá-las depois.
 
 ## O que construir
+
 Uma tela de PDV onde o operador consegue:
+
 - Buscar produtos (por nome ou código).
 - Adicionar produtos ao carrinho, ajustar quantidade e remover itens.
 - Ver o total da venda sendo calculado enquanto monta o carrinho.
@@ -21,6 +24,7 @@ O backend deve expor os dados e receber as vendas. O frontend deve consumir
 esse backend.
 
 ## Regras de negócio
+
 - O total e os subtotais da venda são confiáveis: considere que o cliente
   pode enviar qualquer coisa, então o valor final precisa ser garantido pela
   sua aplicação.
@@ -33,6 +37,7 @@ esse backend.
 - Uma venda finalizada não deve ser alterada.
 
 ## Stack
+
 - Backend: Laravel.
 - Frontend: React. (com TypeScript é bem-vindo, mas não obrigatório)
 
@@ -40,6 +45,7 @@ Use o que você já conhece de cada stack. Bibliotecas extras são bem-vindas,
 desde que justificadas.
 
 ## O que avaliaremos
+
 - **Backend:** como você modela os dados, garante as regras de negócio,
   valida as entradas e organiza o código (rotas, controllers, serviços,
   testes).
@@ -48,15 +54,18 @@ desde que justificadas.
 - **Código:** legibilidade, nomes claros, organização e segurança básica.
 
 ## Entrega
+
 - Repositório Git com o projeto.
 - README explicando como rodar (backend e frontend) e as decisões tomadas.
 - Massa de dados de exemplo (produtos) para testar sem digitar tudo na mão.
 
 ## Prazo
+
 1 a 5 dias. Não precisa entregar tudo: prefira um escopo menor, bem feito e
 explicado, do que muita coisa inacabada.
 
 ## Bônus (opcional)
+
 - Testes automatizados das regras principais.
 - Login/autenticação.
 - Histórico de vendas do dia.

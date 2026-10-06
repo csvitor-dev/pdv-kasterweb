@@ -28,48 +28,48 @@ Os `uuid` são gerados automaticamente (`HasUuids`, UUIDv7) e não são atribuí
 
 ### User (operador)
 
-| Campo      | Tipo     | Observação                 |
-| ---------- | -------- | -------------------------- |
-| `id`       | int      | PK                         |
-| `name`     | string   |                            |
-| `email`    | string   | único                      |
-| `password` | string   | hash (Fortify)             |
+| Campo      | Tipo   | Observação     |
+| ---------- | ------ | -------------- |
+| `id`       | int    | PK             |
+| `name`     | string |                |
+| `email`    | string | único          |
+| `password` | string | hash (Fortify) |
 
 ### Product
 
-| Campo         | Tipo   | Observação                                                         |
-| ------------- | ------ | ------------------------------------------------------------------ |
-| `id`          | int    | PK                                                                 |
-| `uuid`        | uuid   | identificador público                                              |
-| `code`        | string | único; código de barras (EAN pode ter zeros à esquerda)            |
-| `name`        | string | indexado para busca                                                |
-| `price_cents` | int    | preço atual                                                        |
-| `stock`       | int    | opcional (bônus)                                                   |
-| `is_active`   | bool   | produtos inativos não entram em novas vendas                       |
+| Campo         | Tipo   | Observação                                              |
+| ------------- | ------ | ------------------------------------------------------- |
+| `id`          | int    | PK                                                      |
+| `uuid`        | uuid   | identificador público                                   |
+| `code`        | string | único; código de barras (EAN pode ter zeros à esquerda) |
+| `name`        | string | indexado para busca                                     |
+| `price_cents` | int    | preço atual                                             |
+| `stock`       | int    | opcional (bônus)                                        |
+| `is_active`   | bool   | produtos inativos não entram em novas vendas            |
 
 ### Order (venda)
 
-| Campo                   | Tipo          | Observação                                       |
-| ----------------------- | ------------- | ------------------------------------------------ |
-| `id`                    | int           | PK                                               |
+| Campo                   | Tipo          | Observação                                                                |
+| ----------------------- | ------------- | ------------------------------------------------------------------------- |
+| `id`                    | int           | PK                                                                        |
 | `uuid`                  | uuid          | identificador público e chave de rota (URL do comprovante não enumerável) |
-| `user_id`               | int           | FK → `users` (operador que realizou a venda)     |
-| `payment_method`        | PaymentMethod | enum armazenado como inteiro                     |
-| `total_cents`           | int           | calculado pelo backend                           |
-| `amount_received_cents` | int, nulo     | apenas para pagamento em dinheiro                |
-| `change_cents`          | int, nulo     | accessor (não persistido): `amount_received_cents - total_cents` |
-| `created_at`            | timestamp     | momento da finalização                           |
+| `user_id`               | int           | FK → `users` (operador que realizou a venda)                              |
+| `payment_method`        | PaymentMethod | enum armazenado como inteiro                                              |
+| `total_cents`           | int           | calculado pelo backend                                                    |
+| `amount_received_cents` | int, nulo     | apenas para pagamento em dinheiro                                         |
+| `change_cents`          | int, nulo     | accessor (não persistido): `amount_received_cents - total_cents`          |
+| `created_at`            | timestamp     | momento da finalização                                                    |
 
 ### OrderItem
 
-| Campo              | Tipo   | Observação                                             |
-| ------------------ | ------ | ------------------------------------------------------ |
-| `id`               | int    | PK                                                     |
-| `order_id`         | int    | FK → `orders`                                          |
-| `product_id`       | int    | FK → `products`                                        |
-| `product_name`     | string | snapshot do nome para o comprovante                    |
-| `unit_price_cents` | int    | snapshot do preço no momento da venda                  |
-| `quantity`         | int    | ≥ 1                                                    |
+| Campo              | Tipo   | Observação                                               |
+| ------------------ | ------ | -------------------------------------------------------- |
+| `id`               | int    | PK                                                       |
+| `order_id`         | int    | FK → `orders`                                            |
+| `product_id`       | int    | FK → `products`                                          |
+| `product_name`     | string | snapshot do nome para o comprovante                      |
+| `unit_price_cents` | int    | snapshot do preço no momento da venda                    |
+| `quantity`         | int    | ≥ 1                                                      |
 | `subtotal_cents`   | int    | accessor (não persistido): `unit_price_cents * quantity` |
 
 Restrição única em (`order_id`, `product_id`): o mesmo produto repetido no carrinho é agrupado em um único item.
@@ -91,14 +91,14 @@ User 1 ──── N Order 1 ──── N OrderItem N ──── 1 Product
 
 ## Regras de negócio
 
-| Regra do enunciado                                        | Como é garantida                                                                                  |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| Total e subtotais são confiáveis                          | O cliente envia apenas `product_uuid` e `quantity`; preços e totais são calculados no backend.    |
-| Preço no momento da venda fica registrado                 | `order_items.unit_price_cents` (e `product_name`) copiados do produto na criação da venda; o subtotal é calculado a partir deles. |
-| Uma venda tem um ou mais itens                            | Validação `items` obrigatório com `min:1`.                                                        |
-| Em dinheiro, valor recebido ≥ total; troco é a diferença  | Validação após o cálculo do total; `change_cents` calculado e persistido.                         |
-| Produtos indisponíveis não entram em novas vendas         | Validação de `is_active` (e de estoque, se implementado) para todos os itens.                     |
-| Venda finalizada não é alterada                           | A venda já nasce finalizada; não existem rotas de update/delete para pedidos.                     |
+| Regra do enunciado                                       | Como é garantida                                                                                                                  |
+| -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Total e subtotais são confiáveis                         | O cliente envia apenas `product_uuid` e `quantity`; preços e totais são calculados no backend.                                    |
+| Preço no momento da venda fica registrado                | `order_items.unit_price_cents` (e `product_name`) copiados do produto na criação da venda; o subtotal é calculado a partir deles. |
+| Uma venda tem um ou mais itens                           | Validação `items` obrigatório com `min:1`.                                                                                        |
+| Em dinheiro, valor recebido ≥ total; troco é a diferença | Validação após o cálculo do total; `change_cents` calculado e persistido.                                                         |
+| Produtos indisponíveis não entram em novas vendas        | Validação de `is_active` (e de estoque, se implementado) para todos os itens.                                                     |
+| Venda finalizada não é alterada                          | A venda já nasce finalizada; não existem rotas de update/delete para pedidos.                                                     |
 
 A criação da venda ocorre dentro de uma **transação**. Com controle de estoque, os produtos são lidos com `lockForUpdate()` e o estoque é decrementado na mesma transação.
 
@@ -106,23 +106,21 @@ A criação da venda ocorre dentro de uma **transação**. Com controle de estoq
 
 Todas as rotas exigem autenticação.
 
-| Método | Rota                    | Tipo    | Descrição                                                                                 |
-| ------ | ----------------------- | ------- | ----------------------------------------------------------------------------------------- |
-| GET    | `/`                     | Inertia | Tela do PDV                                                                               |
-| GET    | `/products?search=...`  | JSON    | Busca: correspondência exata por `code` ou parcial (`LIKE`) por `name`; apenas ativos     |
-| POST   | `/orders`               | Inertia | Cria e finaliza a venda; em caso de sucesso, redireciona para o comprovante               |
-| GET    | `/orders/{uuid}`        | Inertia | Comprovante/resumo da venda                                                               |
-| GET    | `/orders?date=today`    | Inertia | Histórico de vendas do dia (bônus)                                                        |
+| Método | Rota                   | Tipo    | Descrição                                                                             |
+| ------ | ---------------------- | ------- | ------------------------------------------------------------------------------------- |
+| GET    | `/`                    | Inertia | Tela do PDV                                                                           |
+| GET    | `/products?search=...` | JSON    | Busca: correspondência exata por `code` ou parcial (`LIKE`) por `name`; apenas ativos |
+| POST   | `/orders`              | Inertia | Cria e finaliza a venda; em caso de sucesso, redireciona para o comprovante           |
+| GET    | `/orders/{uuid}`       | Inertia | Comprovante/resumo da venda                                                           |
+| GET    | `/orders?date=today`   | Inertia | Histórico de vendas do dia (bônus)                                                    |
 
 ### Payload de `POST /orders`
 
 ```json
 {
-  "items": [
-    { "product_uuid": "…", "quantity": 2 }
-  ],
-  "payment_method": 0,
-  "amount_received_cents": 5000
+    "items": [{ "product_uuid": "…", "quantity": 2 }],
+    "payment_method": 0,
+    "amount_received_cents": 5000
 }
 ```
 
