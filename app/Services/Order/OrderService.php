@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services\Order;
 
-use App\Enums\PaymentMethod;
 use App\Exceptions\Domain\Order\InsufficientPaymentException;
 use App\Exceptions\Domain\Product\ProductUnavailableException;
 use App\Models\Order;
@@ -102,7 +101,7 @@ class OrderService implements OrderServiceContract
      */
     private function ensurePaymentCoversTotal(CreateOrderInput $input, int $totalCents): void
     {
-        if ($input->paymentMethod !== PaymentMethod::CASH) {
+        if (! $input->paymentMethod->requiresAmountReceived()) {
             return;
         }
 

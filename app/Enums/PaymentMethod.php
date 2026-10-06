@@ -22,17 +22,29 @@ enum PaymentMethod: int
     }
 
     /**
-     * Shape sent to the frontend.
-     *
-     * @return array{value: int, label: string}
+     * Only cash payments need the amount handed over by the customer.
      */
-    public function toOption(): array
+    public function requiresAmountReceived(): bool
     {
-        return ['value' => $this->value, 'label' => $this->label()];
+        return $this === self::CASH;
     }
 
     /**
-     * @return list<array{value: int, label: string}>
+     * Shape sent to the frontend.
+     *
+     * @return array{value: int, label: string, requires_amount_received: bool}
+     */
+    public function toOption(): array
+    {
+        return [
+            'value' => $this->value,
+            'label' => $this->label(),
+            'requires_amount_received' => $this->requiresAmountReceived(),
+        ];
+    }
+
+    /**
+     * @return list<array{value: int, label: string, requires_amount_received: bool}>
      */
     public static function options(): array
     {

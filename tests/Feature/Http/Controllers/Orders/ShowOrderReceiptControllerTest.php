@@ -35,7 +35,7 @@ class ShowOrderReceiptControllerTest extends TestCase
         $response->assertInertia(fn (Assert $page) => $page
             ->component('orders/show')
             ->where('order.uuid', $order->uuid)
-            ->where('order.payment_method', ['value' => 0, 'label' => 'Dinheiro'])
+            ->where('order.payment_method', ['value' => 0, 'label' => 'Dinheiro', 'requires_amount_received' => true])
             ->where('order.total_cents', 3780)
             ->where('order.change_cents', 1220)
             ->where('order.operator', 'Operador Caixa 1')

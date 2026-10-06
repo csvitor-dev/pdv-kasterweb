@@ -19,6 +19,8 @@ export type CartItem = {
 export type PaymentMethodOption = {
     value: number;
     label: string;
+    /** True for cash: the operator must inform the amount received. */
+    requires_amount_received: boolean;
 };
 
 export type OrderItem = {

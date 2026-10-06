@@ -60,6 +60,6 @@ class CreateOrderRequest extends FormRequest
 
     private function isCashPayment(): bool
     {
-        return $this->enum('payment_method', PaymentMethod::class) === PaymentMethod::CASH;
+        return $this->enum('payment_method', PaymentMethod::class)?->requiresAmountReceived() ?? false;
     }
 }

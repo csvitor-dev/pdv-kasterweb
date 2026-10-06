@@ -27,10 +27,10 @@ class ShowPointOfSaleControllerTest extends TestCase
         $response->assertInertia(fn (Assert $page) => $page
             ->component('pos/index')
             ->where('paymentMethods', [
-                ['value' => 0, 'label' => 'Dinheiro'],
-                ['value' => 1, 'label' => 'Cartão de crédito'],
-                ['value' => 2, 'label' => 'Cartão de débito'],
-                ['value' => 3, 'label' => 'PIX'],
+                ['value' => 0, 'label' => 'Dinheiro', 'requires_amount_received' => true],
+                ['value' => 1, 'label' => 'Cartão de crédito', 'requires_amount_received' => false],
+                ['value' => 2, 'label' => 'Cartão de débito', 'requires_amount_received' => false],
+                ['value' => 3, 'label' => 'PIX', 'requires_amount_received' => false],
             ]));
     }
 }
