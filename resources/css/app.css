@@ -141,3 +141,16 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* Receipt printing: keep only the page content. */
+@media print {
+    [data-slot='sidebar'],
+    [data-slot='sidebar-inset'] > header {
+        display: none;
+    }
+
+    [data-slot='sidebar-inset'] {
+        margin: 0 !important;
+        box-shadow: none !important;
+    }
+}
