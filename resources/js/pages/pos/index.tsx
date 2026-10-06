@@ -1,43 +1,41 @@
 import { Head } from '@inertiajs/react';
+import { Cart } from '@/components/pos/cart';
+import { CartSummary } from '@/components/pos/cart-summary';
+import { ProductSearch } from '@/components/pos/product-search';
+import { useCart } from '@/hooks/use-cart';
 import { home } from '@/routes';
-import type { PaymentMethodOption } from '@/types';
 
-type Props = {
-    paymentMethods: PaymentMethodOption[];
-};
+export default function PointOfSale() {
+    const cart = useCart();
 
-/**
- * Point of sale screen. Search and cart (step 2) and the payment dialog
- * (step 3) are composed here; this page only wires them together.
- */
-export default function PointOfSale({ paymentMethods }: Props) {
     return (
         <>
             <Head title="PDV" />
 
-            <div className="grid h-full flex-1 gap-4 p-4 lg:grid-cols-[1fr_380px]">
+            <div className="grid flex-1 gap-4 p-4 lg:grid-cols-[1fr_400px]">
                 <section
                     aria-label="Busca de produtos"
                     className="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
                 >
-                    <h2 className="text-sm font-medium text-muted-foreground">
-                        Buscar produto
-                    </h2>
+                    <ProductSearch onSelect={cart.add} />
                 </section>
 
                 <aside
                     aria-label="Carrinho"
-                    className="flex flex-col rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
+                    className="flex max-h-[calc(100svh-6rem)] flex-col rounded-xl border border-sidebar-border/70 p-4 lg:sticky lg:top-4 dark:border-sidebar-border"
                 >
-                    <h2 className="text-sm font-medium text-muted-foreground">
-                        Carrinho
-                    </h2>
-                    <p className="mt-auto text-xs text-muted-foreground">
-                        Formas de pagamento:{' '}
-                        {paymentMethods
-                            .map((method) => method.label)
-                            .join(', ')}
-                    </p>
+                    <h2 className="mb-2 font-semibold">Carrinho</h2>
+
+                    <Cart
+                        items={cart.items}
+                        onQuantityChange={cart.setQuantity}
+                        onRemove={cart.remove}
+                    />
+
+                    <CartSummary
+                        itemCount={cart.itemCount}
+                        totalCents={cart.totalCents}
+                    />
                 </aside>
             </div>
         </>
