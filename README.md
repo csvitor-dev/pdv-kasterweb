@@ -64,3 +64,4 @@ docs/                # Enunciado e documentação do projeto
 - **SQLite:** banco em arquivo, sem servidor para instalar ou configurar. Suficiente para o escopo do teste e simplifica rodar o projeto.
 - **Localização pt_BR:** mensagens de validação, autenticação e regras de negócio em português (`lang/pt_BR`), com nomes amigáveis para os campos da API (ex.: "valor recebido"). O inglês fica como fallback para chaves não traduzidas.
 - **Autenticação só com login:** operadores são cadastrados fora do PDV (aqui, pelo seeder). Registro, redefinição de senha, verificação de e-mail, 2FA e passkeys do starter kit foram desativados e removidos, deixando só login e logout.
+- **Fuso de negócio:** datas gravadas em UTC; o "dia" das vendas do dia é calculado em `APP_BUSINESS_TIMEZONE` (padrão `America/Sao_Paulo`), para que uma venda às 22h não caia no dia seguinte.
