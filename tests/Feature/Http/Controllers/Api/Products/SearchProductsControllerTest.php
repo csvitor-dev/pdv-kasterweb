@@ -25,7 +25,7 @@ class SearchProductsControllerTest extends TestCase
         $response = $this->getJson(route('api.products.search'));
 
         $response->assertUnprocessable()
-            ->assertJsonValidationErrors(['search' => 'The search field is required.']);
+            ->assertJsonValidationErrors(['search' => 'O campo busca é obrigatório.']);
     }
 
     public function test_returns_product_whose_code_matches_exactly(): void

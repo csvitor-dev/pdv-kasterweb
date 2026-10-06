@@ -105,7 +105,7 @@ class StoreOrderControllerTest extends TestCase
         ]);
 
         $response->assertUnprocessable()
-            ->assertJsonValidationErrors(['amount_received_cents' => 'The amount received cents field is required.']);
+            ->assertJsonValidationErrors(['amount_received_cents' => 'O campo valor recebido é obrigatório.']);
 
         $this->assertDatabaseCount('orders', 0);
     }
@@ -133,7 +133,7 @@ class StoreOrderControllerTest extends TestCase
         ]);
 
         $response->assertUnprocessable()
-            ->assertJsonValidationErrors(['items' => 'The items field is required.']);
+            ->assertJsonValidationErrors(['items' => 'O campo itens é obrigatório.']);
 
         $this->assertDatabaseCount('orders', 0);
     }

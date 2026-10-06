@@ -62,3 +62,4 @@ docs/                # Enunciado e documentação do projeto
 - **Testes de integração por regra de negócio:** cada regra do enunciado é coberta por um teste que entra pela requisição HTTP e atravessa todas as camadas até o banco (SQLite em memória), sem mocks.
 - **Starter kit oficial (Laravel React):** já entrega autenticação (Fortify), componentes de UI (Radix + Tailwind) e tooling configurado, permitindo focar no domínio do PDV.
 - **SQLite:** banco em arquivo, sem servidor para instalar ou configurar. Suficiente para o escopo do teste e simplifica rodar o projeto.
+- **Localização pt_BR:** mensagens de validação, autenticação e regras de negócio em português (`lang/pt_BR`), com nomes amigáveis para os campos da API (ex.: "valor recebido"). O inglês fica como fallback para chaves não traduzidas.
