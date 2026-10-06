@@ -40,3 +40,13 @@ export type Order = {
     items: OrderItem[];
     created_at: string;
 };
+
+/** Order as listed in the day's sales: no items, only how many there are. */
+export type OrderSummary = Omit<Order, 'items'> & {
+    items_count: number;
+};
+
+export type DailySalesSummary = {
+    orders_count: number;
+    total_cents: number;
+};
