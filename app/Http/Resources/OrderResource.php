@@ -22,15 +22,15 @@ class OrderResource extends JsonResource
     {
         return [
             'uuid' => $this->uuid,
-            'payment_method' => [
-                'value' => $this->payment_method->value,
-                'label' => $this->payment_method->label(),
-            ],
+            'payment_method' => $this->payment_method->toOption(),
             'total_cents' => $this->total_cents,
             'amount_received_cents' => $this->amount_received_cents,
             'change_cents' => $this->change_cents,
             'operator' => $this->whenLoaded('user', fn (): string => $this->user->name),
-            'items' => OrderItemResource::collection($this->whenLoaded('items')),
+            'items' => $this->whenLoaded(
+                'items',
+                fn (): array => OrderItemResource::collection($this->items)->resolve($request),
+            ),
             'created_at' => $this->created_at?->toIso8601String(),
         ];
     }
