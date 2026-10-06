@@ -29,7 +29,7 @@ php artisan db:seed  # massa de dados de exemplo
 composer dev       # servidor Laravel + Vite em paralelo
 ```
 
-A aplicação fica disponível em <http://localhost:8000>. Backend e frontend rodam juntos: o React é servido pelo Laravel via Inertia, então não é necessário subir dois projetos separados.
+A aplicação fica disponível em <http://localhost:8000>. Entre com o operador de exemplo criado pelo seeder: `test@example.com` / `password`. Backend e frontend rodam juntos: o React é servido pelo Laravel via Inertia, então não é necessário subir dois projetos separados.
 
 ## Testes e qualidade
 
@@ -63,3 +63,4 @@ docs/                # Enunciado e documentação do projeto
 - **Starter kit oficial (Laravel React):** já entrega autenticação (Fortify), componentes de UI (Radix + Tailwind) e tooling configurado, permitindo focar no domínio do PDV.
 - **SQLite:** banco em arquivo, sem servidor para instalar ou configurar. Suficiente para o escopo do teste e simplifica rodar o projeto.
 - **Localização pt_BR:** mensagens de validação, autenticação e regras de negócio em português (`lang/pt_BR`), com nomes amigáveis para os campos da API (ex.: "valor recebido"). O inglês fica como fallback para chaves não traduzidas.
+- **Autenticação só com login:** operadores são cadastrados fora do PDV (aqui, pelo seeder). Registro, redefinição de senha, verificação de e-mail, 2FA e passkeys do starter kit foram desativados e removidos, deixando só login e logout.
