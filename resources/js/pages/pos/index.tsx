@@ -1,12 +1,14 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { Cart } from '@/components/pos/cart';
 import { CartSummary } from '@/components/pos/cart-summary';
 import { ProductSearch } from '@/components/pos/product-search';
 import { useCart } from '@/hooks/use-cart';
 import { home } from '@/routes';
+import type { Auth } from '@/types';
 
 export default function PointOfSale() {
-    const cart = useCart();
+    const { auth } = usePage<{ auth: Auth }>().props;
+    const cart = useCart(`pos:cart:${auth.user.id}`);
 
     return (
         <>
