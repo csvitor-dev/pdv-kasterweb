@@ -67,4 +67,13 @@ class AuthenticationTest extends TestCase
 
         $response->assertTooManyRequests();
     }
+
+    public function test_password_confirmation_routes_are_not_registered(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->get('/user/confirm-password')->assertNotFound();
+        $this->actingAs($user)->post('/user/confirm-password', ['password' => 'password'])->assertNotFound();
+        $this->actingAs($user)->get('/user/confirmed-password-status')->assertNotFound();
+    }
 }

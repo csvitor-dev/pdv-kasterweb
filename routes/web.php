@@ -12,4 +12,5 @@ Route::middleware('auth')->group(function () {
         ->name('orders.show');
 });
 
+require __DIR__.'/auth.php';
 require __DIR__.'/settings.php';
