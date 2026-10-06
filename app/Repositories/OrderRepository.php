@@ -6,6 +6,8 @@ namespace App\Repositories;
 
 use App\Models\Order;
 use App\Repositories\Contracts\OrderRepository as OrderRepositoryContract;
+use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class OrderRepository implements OrderRepositoryContract
 {
@@ -23,5 +25,16 @@ class OrderRepository implements OrderRepositoryContract
             ->with(['items', 'user'])
             ->where('uuid', $uuid)
             ->first();
+    }
+
+    public function listCreatedBetween(CarbonInterface $from, CarbonInterface $to): Collection
+    {
+        return Order::query()
+            ->with('user')
+            ->withCount('items')
+            ->whereBetween('created_at', [$from, $to])
+            ->latest()
+            ->latest('id')
+            ->get();
     }
 }
