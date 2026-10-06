@@ -113,7 +113,9 @@ Todas as rotas exigem autenticação. As rotas de dados ficam em `routes/api.php
 | POST   | `/api/orders`              | JSON    | Cria e finaliza a venda → `201` com o comprovante                                                       |
 | GET    | `/api/orders/{uuid}`       | JSON    | Comprovante/resumo da venda; uuid inexistente → `404`                                                   |
 | GET    | `/orders/{uuid}`           | Inertia | Página do comprovante                                                                                   |
-| GET    | `/orders?date=today`       | Inertia | Histórico de vendas do dia (bônus)                                                                      |
+| GET    | `/orders`                  | Inertia | Vendas do dia (bônus): lista, quantidade e total vendido no dia de negócio                              |
+
+O "dia" segue o fuso de negócio (`APP_BUSINESS_TIMEZONE`, padrão `America/Sao_Paulo`); os horários continuam gravados em UTC.
 
 Não existem rotas de alteração ou exclusão de vendas: `PUT`/`PATCH`/`DELETE` em `/api/orders/{uuid}` respondem `405`.
 
@@ -178,6 +180,6 @@ O pagamento é um modal na própria tela, e não uma página separada, para não
 
 Itens com preço unitário registrado, quantidades, subtotais, total, forma de pagamento, valor recebido e troco, operador e data/hora. Ação para iniciar nova venda.
 
-### Histórico do dia (bônus)
+### Vendas do dia (`/orders`, bônus)
 
-Lista das vendas do dia com link para cada comprovante.
+Quantidade de vendas e total vendido no dia, e a lista das vendas (hora, produtos, forma de pagamento, operador, total) com link para cada comprovante.

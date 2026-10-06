@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { ShoppingCart } from 'lucide-react';
+import { ReceiptText, ShoppingCart } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -13,6 +13,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { home } from '@/routes';
+import { index as todayOrders } from '@/routes/orders';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -20,6 +21,11 @@ const mainNavItems: NavItem[] = [
         title: 'PDV',
         href: home(),
         icon: ShoppingCart,
+    },
+    {
+        title: 'Vendas do dia',
+        href: todayOrders(),
+        icon: ReceiptText,
     },
 ];
 

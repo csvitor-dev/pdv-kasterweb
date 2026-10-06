@@ -31,6 +31,7 @@ class OrderResource extends JsonResource
                 'items',
                 fn (): array => OrderItemResource::collection($this->items)->resolve($request),
             ),
+            'items_count' => $this->whenCounted('items'),
             'created_at' => $this->created_at?->toIso8601String(),
         ];
     }

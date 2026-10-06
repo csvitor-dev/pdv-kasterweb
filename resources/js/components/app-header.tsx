@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Menu, Search, ShoppingCart } from 'lucide-react';
+import { Menu, Search, ReceiptText, ShoppingCart } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Breadcrumbs } from '@/components/breadcrumbs';
@@ -33,6 +33,7 @@ import { useCurrentUrl } from '@/hooks/use-current-url';
 import { useInitials } from '@/hooks/use-initials';
 import { cn, toUrl } from '@/lib/utils';
 import { home } from '@/routes';
+import { index as todayOrders } from '@/routes/orders';
 import type { BreadcrumbItem, NavItem } from '@/types';
 
 type Props = {
@@ -44,6 +45,11 @@ const mainNavItems: NavItem[] = [
         title: 'PDV',
         href: home(),
         icon: ShoppingCart,
+    },
+    {
+        title: 'Vendas do dia',
+        href: todayOrders(),
+        icon: ReceiptText,
     },
 ];
 

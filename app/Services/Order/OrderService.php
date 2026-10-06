@@ -14,6 +14,7 @@ use App\Repositories\Contracts\ProductRepository;
 use App\Services\Order\Contracts\OrderService as OrderServiceContract;
 use App\Services\Order\Inputs\CreateOrderInput;
 use App\Services\Order\Inputs\OrderItemInput;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -58,6 +59,16 @@ class OrderService implements OrderServiceContract
     {
         return $this->orderRepository->findByUuid($uuid)
             ?? throw (new ModelNotFoundException)->setModel(Order::class, [$uuid]);
+    }
+
+    public function listForDay(CarbonInterface $moment): Collection
+    {
+        $localMoment = $moment->toImmutable()->setTimezone(config('app.business_timezone'));
+
+        return $this->orderRepository->listCreatedBetween(
+            $localMoment->startOfDay()->utc(),
+            $localMoment->endOfDay()->utc(),
+        );
     }
 
     /**

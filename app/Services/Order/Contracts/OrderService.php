@@ -8,6 +8,8 @@ use App\Exceptions\Domain\Order\InsufficientPaymentException;
 use App\Exceptions\Domain\Product\ProductUnavailableException;
 use App\Models\Order;
 use App\Services\Order\Inputs\CreateOrderInput;
+use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 interface OrderService
@@ -24,4 +26,11 @@ interface OrderService
      * @throws ModelNotFoundException<Order>
      */
     public function findByUuidOrFail(string $uuid): Order;
+
+    /**
+     * Orders of the business day that contains the given moment.
+     *
+     * @return Collection<int, Order>
+     */
+    public function listForDay(CarbonInterface $moment): Collection;
 }
