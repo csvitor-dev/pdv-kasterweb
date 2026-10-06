@@ -104,17 +104,20 @@ A criação da venda ocorre dentro de uma **transação**. Com controle de estoq
 
 ## Rotas
 
-Todas as rotas exigem autenticação.
+Todas as rotas exigem autenticação. As rotas de dados ficam em `routes/api.php` (prefixo `/api`, nomes `api.*`), autenticadas com Sanctum em modo SPA: o cookie de sessão do login (Fortify) autentica o front, e tokens Bearer ficam disponíveis para clientes fora do navegador.
 
-| Método | Rota                   | Tipo    | Descrição                                                                             |
-| ------ | ---------------------- | ------- | ------------------------------------------------------------------------------------- |
-| GET    | `/`                    | Inertia | Tela do PDV                                                                           |
-| GET    | `/products?search=...` | JSON    | Busca: correspondência exata por `code` ou parcial (`LIKE`) por `name`; apenas ativos |
-| POST   | `/orders`              | Inertia | Cria e finaliza a venda; em caso de sucesso, redireciona para o comprovante           |
-| GET    | `/orders/{uuid}`       | Inertia | Comprovante/resumo da venda                                                           |
-| GET    | `/orders?date=today`   | Inertia | Histórico de vendas do dia (bônus)                                                    |
+| Método | Rota                       | Tipo    | Descrição                                                                                               |
+| ------ | -------------------------- | ------- | ------------------------------------------------------------------------------------------------------- |
+| GET    | `/`                        | Inertia | Tela do PDV                                                                                             |
+| GET    | `/api/products?search=...` | JSON    | Busca: `code` exato ou `name` parcial; apenas ativos e com estoque; até 20 resultados; vazio → `200 []` |
+| POST   | `/api/orders`              | JSON    | Cria e finaliza a venda → `201` com o comprovante                                                       |
+| GET    | `/api/orders/{uuid}`       | JSON    | Comprovante/resumo da venda; uuid inexistente → `404`                                                   |
+| GET    | `/orders/{uuid}`           | Inertia | Página do comprovante                                                                                   |
+| GET    | `/orders?date=today`       | Inertia | Histórico de vendas do dia (bônus)                                                                      |
 
-### Payload de `POST /orders`
+Não existem rotas de alteração ou exclusão de vendas: `PUT`/`PATCH`/`DELETE` em `/api/orders/{uuid}` respondem `405`.
+
+### Payload de `POST /api/orders`
 
 ```json
 {
@@ -124,7 +127,29 @@ Todas as rotas exigem autenticação.
 }
 ```
 
-`amount_received_cents` é obrigatório apenas quando `payment_method` é `CASH`.
+`amount_received_cents` é obrigatório apenas quando `payment_method` é `CASH`; nas demais formas é ignorado. Qualquer preço, subtotal ou total enviado pelo cliente é ignorado.
+
+### Erros
+
+Violações de regra de negócio respondem `422` no mesmo formato dos erros de validação do Laravel (`{ message, errors: { campo: [...] } }`):
+
+| Situação                         | Campo do erro            |
+| -------------------------------- | ------------------------ |
+| Produto inexistente ou inativo   | `items.{n}.product_uuid` |
+| Estoque insuficiente             | `items.{n}.product_uuid` |
+| Valor recebido menor que o total | `amount_received_cents`  |
+
+## Arquitetura do backend
+
+Fluxo `Controller → Service → Repository`:
+
+- **Controllers** (`app/Http/Controllers/Api`): um por endpoint (`__invoke`); recebem o FormRequest, chamam o Service e devolvem um API Resource.
+- **FormRequests** (`app/Http/Requests/Api`): validam o formato da entrada e a convertem em um **Input** (`toInput()`).
+- **Inputs** (`app/Services/*/Inputs`): DTOs imutáveis, sem dependência de HTTP; são o contrato de entrada dos services.
+- **Services** (`app/Services`): regras de negócio. A criação da venda ocorre em uma transação, com os produtos travados (`lockForUpdate`) até o fim.
+- **Repositories** (`app/Repositories`): apenas acesso a dados, atrás de interfaces registradas no `AppServiceProvider`.
+- **Exceções de domínio** (`app/Exceptions/Domain`): lançadas pelos services e renderizadas como `422`.
+- **Resources** (`app/Http/Resources`): contrato de saída; expõem `uuid`, nunca o `id` interno.
 
 ### Decisão: venda criada e paga em uma única requisição
 
@@ -145,7 +170,7 @@ Tela de autenticação do starter kit (Fortify), sem registro.
 - Campo de busca com resultados (estados: carregando, sem resultados, erro).
 - Carrinho: lista de itens com quantidade ajustável, remoção e subtotal (estado vazio inicial).
 - Total da venda calculado em tempo real (exibição; o valor final é do backend).
-- **Modal de pagamento**: seleção da forma de pagamento; em dinheiro, campo de valor recebido com troco calculado em tempo real e bloqueio quando o valor é menor que o total. Confirmar envia `POST /orders`.
+- **Modal de pagamento**: seleção da forma de pagamento; em dinheiro, campo de valor recebido com troco calculado em tempo real e bloqueio quando o valor é menor que o total. Confirmar envia `POST /api/orders`.
 
 O pagamento é um modal na própria tela, e não uma página separada, para não perder o estado do carrinho na navegação.
 

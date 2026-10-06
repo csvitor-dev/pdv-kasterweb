@@ -2,6 +2,14 @@
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\OrderRepository as OrderRepositoryContract;
+use App\Repositories\Contracts\ProductRepository as ProductRepositoryContract;
+use App\Repositories\OrderRepository;
+use App\Repositories\ProductRepository;
+use App\Services\Order\Contracts\OrderService as OrderServiceContract;
+use App\Services\Order\OrderService;
+use App\Services\Product\Contracts\ProductService as ProductServiceContract;
+use App\Services\Product\ProductService;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(ProductServiceContract::class, ProductService::class);
+        $this->app->bind(OrderServiceContract::class, OrderService::class);
+        $this->app->bind(ProductRepositoryContract::class, ProductRepository::class);
+        $this->app->bind(OrderRepositoryContract::class, OrderRepository::class);
     }
 
     /**
