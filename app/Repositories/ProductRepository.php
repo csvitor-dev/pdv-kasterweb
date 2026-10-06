@@ -17,7 +17,7 @@ class ProductRepository implements ProductRepositoryContract
             ->where('is_active', true)
             ->where('stock', '>', 0)
             ->where(function (Builder $query) use ($term): void {
-                $query->where('code', $term)
+                $query->whereLike('code', "%{$term}%")
                     ->orWhereLike('name', "%{$term}%");
             })
             ->orderBy('name')

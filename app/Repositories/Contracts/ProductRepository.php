@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 interface ProductRepository
 {
     /**
-     * Sellable products whose code matches the term exactly or whose name contains it.
+     * Sellable products whose code or name contains the term.
      *
      * @return Collection<int, Product>
      */

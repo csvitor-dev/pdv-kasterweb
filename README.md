@@ -8,7 +8,7 @@ Frente de caixa (PDV) para o operador do dia a dia: busca de produtos por nome o
 
 | Requisito do enunciado                        | Como foi atendido                                                                                                                       |
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Buscar produtos por nome ou código            | Um único campo: código exato ou parte do nome, com debounce. Enter adiciona o produto lido pelo leitor de código de barras.             |
+| Buscar produtos por nome ou código            | Um único campo: parte do código ou do nome, com debounce. Enter adiciona o produto lido pelo leitor de código de barras.                |
 | Adicionar, ajustar quantidade e remover itens | Carrinho com +/−, campo de quantidade (limitado ao estoque) e remoção. Persiste no `sessionStorage`, então um reload não perde a venda. |
 | Ver o total enquanto monta o carrinho         | Total e subtotais atualizados em tempo real.                                                                                            |
 | Finalizar informando a forma de pagamento     | Modal com Dinheiro, Cartão de crédito, Cartão de débito e PIX.                                                                          |

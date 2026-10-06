@@ -42,14 +42,17 @@ class SearchProductsControllerTest extends TestCase
             ->assertJsonPath('data.0.price_cents', 549);
     }
 
-    public function test_does_not_match_partial_code(): void
+    public function test_returns_products_whose_code_contains_the_term(): void
     {
         $this->actingAs(User::factory()->create());
         Product::factory()->create(['code' => '7891000100103', 'name' => 'Leite Integral']);
+        Product::factory()->create(['code' => '7896005800010', 'name' => 'Arroz Branco']);
 
         $response = $this->getJson(route('api.products.search', ['search' => '78910']));
 
-        $response->assertOk()->assertJsonCount(0, 'data');
+        $response->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.code', '7891000100103');
     }
 
     public function test_returns_all_products_whose_name_contains_the_term(): void

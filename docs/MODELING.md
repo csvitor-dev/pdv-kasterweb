@@ -106,14 +106,14 @@ A criação da venda ocorre dentro de uma **transação**. Com controle de estoq
 
 Todas as rotas exigem autenticação. As rotas de dados ficam em `routes/api.php` (prefixo `/api`, nomes `api.*`), autenticadas com Sanctum em modo SPA: o cookie de sessão do login (Fortify) autentica o front, e tokens Bearer ficam disponíveis para clientes fora do navegador.
 
-| Método | Rota                       | Tipo    | Descrição                                                                                               |
-| ------ | -------------------------- | ------- | ------------------------------------------------------------------------------------------------------- |
-| GET    | `/`                        | Inertia | Tela do PDV                                                                                             |
-| GET    | `/api/products?search=...` | JSON    | Busca: `code` exato ou `name` parcial; apenas ativos e com estoque; até 20 resultados; vazio → `200 []` |
-| POST   | `/api/orders`              | JSON    | Cria e finaliza a venda → `201` com o comprovante                                                       |
-| GET    | `/api/orders/{uuid}`       | JSON    | Comprovante/resumo da venda; uuid inexistente → `404`                                                   |
-| GET    | `/orders/{uuid}`           | Inertia | Página do comprovante                                                                                   |
-| GET    | `/orders`                  | Inertia | Vendas do dia (bônus): lista, quantidade e total vendido no dia de negócio                              |
+| Método | Rota                       | Tipo    | Descrição                                                                                         |
+| ------ | -------------------------- | ------- | ------------------------------------------------------------------------------------------------- |
+| GET    | `/`                        | Inertia | Tela do PDV                                                                                       |
+| GET    | `/api/products?search=...` | JSON    | Busca: `code` ou `name` parcial; apenas ativos e com estoque; até 20 resultados; vazio → `200 []` |
+| POST   | `/api/orders`              | JSON    | Cria e finaliza a venda → `201` com o comprovante                                                 |
+| GET    | `/api/orders/{uuid}`       | JSON    | Comprovante/resumo da venda; uuid inexistente → `404`                                             |
+| GET    | `/orders/{uuid}`           | Inertia | Página do comprovante                                                                             |
+| GET    | `/orders`                  | Inertia | Vendas do dia (bônus): lista, quantidade e total vendido no dia de negócio                        |
 
 O "dia" segue o fuso de negócio (`APP_BUSINESS_TIMEZONE`, padrão `America/Sao_Paulo`); os horários continuam gravados em UTC.
 
