@@ -1,11 +1,16 @@
 <?php
 
+use App\Http\Controllers\Orders\ShowOrderReceiptController;
+use App\Http\Controllers\PointOfSale\ShowPointOfSaleController;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'welcome')->name('home');
+Route::middleware('auth')->group(function () {
+    Route::get('/', ShowPointOfSaleController::class)->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::get('orders/{uuid}', ShowOrderReceiptController::class)
+        ->whereUuid('uuid')
+        ->name('orders.show');
 });
 
+require __DIR__.'/auth.php';
 require __DIR__.'/settings.php';

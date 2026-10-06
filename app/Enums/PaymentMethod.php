@@ -20,4 +20,22 @@ enum PaymentMethod: int
             PaymentMethod::PIX => 'PIX',
         };
     }
+
+    /**
+     * Shape sent to the frontend.
+     *
+     * @return array{value: int, label: string}
+     */
+    public function toOption(): array
+    {
+        return ['value' => $this->value, 'label' => $this->label()];
+    }
+
+    /**
+     * @return list<array{value: int, label: string}>
+     */
+    public static function options(): array
+    {
+        return array_map(fn (self $method): array => $method->toOption(), self::cases());
+    }
 }
